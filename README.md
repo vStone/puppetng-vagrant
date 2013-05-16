@@ -20,7 +20,13 @@ vagrant-hostmanager (>=0.4)
 
 ## PuppetNG Bootstrapping
 
-TODO: Document what we want to do :)
+### Goals
+
+TODO: Document what we want to achieve.
+
+### Vagrant
+
+TODO: Explain how the Vagrantfile and setup is.
 
 ## TODO
 
