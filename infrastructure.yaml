@@ -1,0 +1,122 @@
+---
+####
+#                                 _         __ _ _
+#                                | |       / _(_| |
+#   _____  ____ _ _ __ ___  _ __ | | ___  | |_ _| | ___
+#  / _ \ \/ / _` | '_ ` _ \| '_ \| |/ _ \ |  _| | |/ _ \
+# |  __/>  | (_| | | | | | | |_) | |  __/ | | | | |  __/
+#  \___/_/\_\__,_|_| |_| |_| .__/|_|\___| |_| |_|_|\___|
+#                          | |
+#                          |_|
+####
+#
+# The infrastructure file should be a yaml formatted file.
+# It should contain the key infrastructure and contain 2 hashes:
+#
+#   * nodes
+#   * roles
+#
+####
+infrastructure:
+  nodes:
+    # Nodes are matched on the fqdn.
+    # Each node can/must have one or more roles
+    #
+    # Roles are configured by providing either
+    #
+    #   * a single string:  Single role in default pool (no pool configured)
+    #   * an array:         Multiple roles in default pool (no pool configured)
+    #   * a hashtable:      Single or multiple roles with pools:
+    #                       A pool can be
+    #                         * nil:      use default pool
+    #                         * a string: single pool to use
+    #                         * an array: multiple pools.
+    #
+    # In general, for simple setups, you can forget about the pools
+    # altogether. It is only required if you want to have (for example)
+    # multiple proxies that proxy to different masters.
+    #
+    # Examples:
+    #
+    # singlerole.siexample.com:
+    #   role: ca
+    #
+    # multirole.example.com:
+    #   role: - ca
+    #         - master
+    #
+    # multipools.example.com:
+    #   role:
+    #     proxy: - data-prod
+    #            - default
+    #
+    puppetca01.virtual.vstone.org:
+      role: - ca
+            - master
+    puppetca02.virtual.vstone.org:
+      role: ca
+    puppetmaster01.virtual.vstone.org:
+      role: master
+    puppetmaster02.virtual.vstone.org:
+      role: master
+    proxy01.virtual.vstone.org:
+      role: proxy
+    proxy02.virtual.vstone.org:
+      role:
+        proxy: - data
+               - default
+    proxy03.data.virtual.vstone.org:
+      role:
+        proxy: data
+    puppetdb01.virtual.vstone.org:
+      role: db
+    puppetdb02.virtual.vstone.org:
+      role: db
+
+  roles:
+    # Configuration for roles
+    # A role can have split up configuration for
+    # different roles, but there should always be a default
+    # pool (called default).
+
+
+    # You can not define additional pools for a ca server. Only
+    # the default pool will be used. For multiple
+    # ca servers, you should create different infrastructure
+    # files on the ca server that will be the master.
+    ca:
+      default:
+        name: Puppet CA Server
+        certname: puppetca.virtual.vstone.org
+
+    # A puppetmaster.
+    master:
+
+    # A db server
+    db:
+
+
+    # Proxies can have different pools.
+    # Each pool can be assigned a name,
+    # and for, an array with other roles
+    # this proxy will serve. You can also
+    # specify a specific pool from a role to serve.
+    # Remember that there is only one ca. Using
+    # other pools besides the default one will not
+    # work.
+    #
+    # The name is a required field for the proxy.
+    # If the for parameter is not defined,
+    # the module asumes that you mean ca and master.
+    proxy:
+      default:
+        name: puppetmaster.virtual.vstone.org
+        for:
+          - ca
+          - master
+      data:
+        name: puppetmaster.data.virtual.vstone.org
+        for:
+          - ca
+          - master
+
