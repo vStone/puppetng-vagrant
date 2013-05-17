@@ -5,13 +5,14 @@ boxname=${2-unknown}
 sources=${3-puppet}
 
 ## Make sure the required directories exist.
-[ -d /etc/puppet/environments/${environment} ] || mkdir -p /etc/puppet/environments/${environment}
-[ -d /etc/puppet/hieradata ] || mkdir -p /etc/puppet/hieradata
-[ -d /vagrant/graphs/${boxname} ] || mkdir -p /vagrant/graphs/${boxname}
+[ -d /etc/puppet/environments/${environment} ] || mkdir -pv /etc/puppet/environments/${environment}
+[ -d /etc/puppet/hieradata ] || mkdir -pv /etc/puppet/hieradata
+[ -d /vagrant/graphs/${boxname} ] || mkdir -pv /vagrant/graphs/${boxname}
 
 ## Copy general config files.
-[ -f /vagrant/${sources}/hiera.yaml-base ] && cp /vagrant/${sources}/hiera.yaml-base /etc/puppet/hiera.yaml
-[ -f /vagrant/${sources}/puppet.conf-base ] && cp /vagrant/${sources}/puppet.conf-base /etc/puppet/puppet.conf
+[ -f /vagrant/${sources}/hiera.yaml ] && cp -v /vagrant/${sources}/hiera.yaml /etc/puppet/hiera.yaml  || \
+  ( [ -f /vagrant/${sources}/hiera.yaml-base ] && cp -v /vagrant/${sources}/hiera.yaml-base /etc/puppet/hiera.yaml )
+[ -f /vagrant/${sources}/puppet.conf-base ] && cp -v /vagrant/${sources}/puppet.conf-base /etc/puppet/puppet.conf
 
 ## Sync puppet code to the right environment.
 rsync -alrcWt --del --progress \
