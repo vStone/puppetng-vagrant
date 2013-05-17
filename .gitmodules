@@ -1,0 +1,3 @@
+[submodule "puppetca"]
+	path = puppetca
+	url = git://git.vstone.org/puppet/master/puppetca.git
