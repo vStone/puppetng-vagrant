@@ -32,7 +32,7 @@ VIRTUAL_MACHINES = {
 
 Vagrant.configure('2') do |config|
   ## Hostmanager configuration
-  config.hostmanager.enabled = true
+  config.hostmanager.enabled = false
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
 
@@ -61,6 +61,14 @@ Vagrant.configure('2') do |config|
 
       ## Update hosts file on the machine.
       vm_config.vm.provision :hostmanager
+
+      if File.exists?(File.expand_path(File.join(File.dirname(__FILE__), "./scripts/pre-#{name}.sh")))
+        vm_config.vm.provision :shell do |shell|
+          shell.path = File.expand_path(File.join(File.dirname(__FILE__), "./scripts/pre-#{name}.sh"))
+          shell.args = "#{environment} #{sourcedir}"
+        end
+      end
+
       vm_config.vm.provision :shell do |shell|
         if File.exists?(File.expand_path(File.join(File.dirname(__FILE__), "./scripts/puppetapply-#{name}.sh")))
           shell.path = "scripts/puppetapply-#{name}.sh"
