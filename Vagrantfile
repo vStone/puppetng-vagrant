@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+# Shebang is here only for automatic syntax highlighting purposes.
+# Do not try and run this file :)
+
 Vagrant.require_plugin 'vagrant-hostmanager'
 
 VIRTUAL_MACHINES = {
