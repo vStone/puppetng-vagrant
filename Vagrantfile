@@ -44,9 +44,10 @@ Vagrant.configure('2') do |config|
     config.vm.define name do |vm_config|
 
       ## Configure basics.
-      vm_config.vm.hostname = cfg[:hostname]                if cfg[:hostname]
+      vm_config.vm.box                = cfg[:box]           if cfg[:box]
+      vm_config.vm.hostname           = cfg[:hostname]      if cfg[:hostname]
+      vm_config.hostmanager.aliases   = cfg[:hostaliases]   if cfg[:hostaliases]
       vm_config.vm.network :private_network, ip: cfg[:ip]   if cfg[:ip]
-      vm_config.hostmanager.aliases = cfg[:hostaliases]     if cfg[:hostaliases]
 
       ## Deal with virtualbox options (setting memory and such)
       vm_config.vm.provider :virtualbox do |vbox|
