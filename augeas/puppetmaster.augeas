@@ -1,0 +1,13 @@
+set /augeas/load/Puppet/lens Puppet.lns
+set /augeas/load/Puppet/incl /etc/puppet/puppet.conf
+load
+
+set /files/etc/puppet/puppet.conf/master/manifest '$confdir/environments/$environment/manifests/site.pp'
+set /files/etc/puppet/puppet.conf/master/modulepath '$confdir/environments/$environment/modules/upstream:$confdir/environments/$environment/modules/internal:$confdir/environments/$environment/modules/dev'
+set /files/etc/puppet/puppet.conf/master/factsignore '.svn CVS .git *.markdown *.md .*.swp'
+set /files/etc/puppet/puppet.conf/master/pluginsignore '.svn CVS .git *.markdown *.md .*.swp'
+set /files/etc/puppet/puppet.conf/master/ca true
+set /files/etc/puppet/puppet.conf/master/autosign '$confdir/autosign.conf { mode = 664 }
+set /files/etc/puppet/puppet.conf/master/certname 'puppetmaster.DOMAIN'
+
+save
